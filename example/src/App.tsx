@@ -1,19 +1,50 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text } from 'react-native';
-import { multiply } from 'react-native-vision-jsi-processor';
+import { install } from 'react-native-vision-jsi-processor';
+import {
+  Camera,
+  useCameraPermission,
+  useCameraDevice,
+  useFrameProcessor,
+} from 'react-native-vision-camera';
+
+install();
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
+  const { hasPermission, requestPermission } = useCameraPermission();
+  const device = useCameraDevice('back');
 
   React.useEffect(() => {
-    multiply(3, 7).then(setResult);
-  }, []);
+    if (!hasPermission) {
+      requestPermission();
+    }
+  }, [hasPermission, requestPermission]);
 
+  //@ts-ignore
+  const frameProc = global.frameProcessor;
+
+  const frameProcessor = useFrameProcessor(
+    (frame) => {
+      'worklet';
+      console.log(frameProc(frame));
+    },
+    [frameProc]
+  );
+
+  if (device == null)
+    return (
+      <View style={styles.container}>
+        <Text>No device</Text>
+      </View>
+    );
   return (
-    <View style={styles.container}>
-      <Text>Result: {result}</Text>
-    </View>
+    <Camera
+      style={StyleSheet.absoluteFill}
+      device={device}
+      isActive={true}
+      frameProcessor={frameProcessor}
+    />
   );
 }
 

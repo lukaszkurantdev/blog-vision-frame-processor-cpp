@@ -1,12 +1,16 @@
 package com.visionjsiprocessor;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
+import com.facebook.react.bridge.JavaScriptContextHolder;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 
-public class VisionJsiProcessorModule extends VisionJsiProcessorSpec {
+public class VisionJsiProcessorModule extends ReactContextBaseJavaModule {
   public static final String NAME = "VisionJsiProcessor";
 
   VisionJsiProcessorModule(ReactApplicationContext context) {
@@ -23,12 +27,16 @@ public class VisionJsiProcessorModule extends VisionJsiProcessorSpec {
     System.loadLibrary("react-native-vision-jsi-processor");
   }
 
-  public static native double nativeMultiply(double a, double b);
+  public static native void nativeInstall(long jsi);
 
-  // Example method
-  // See https://reactnative.dev/docs/native-modules-android
-  @ReactMethod
-  public void multiply(double a, double b, Promise promise) {
-    promise.resolve(nativeMultiply(a, b));
+  @ReactMethod(isBlockingSynchronousMethod = true)
+  public void install() {
+    JavaScriptContextHolder jsContext = getReactApplicationContext().getJavaScriptContextHolder();
+
+    if(jsContext.get() != 0) {
+      nativeInstall(jsContext.get());
+    } else {
+      Log.e("SimpleJsiModule", "JSI Runtime is not available in debug mode");
+    }
   }
 }

@@ -6,12 +6,7 @@ const LINKING_ERROR =
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo Go\n';
 
-// @ts-expect-error
-const isTurboModuleEnabled = global.__turboModuleProxy != null;
-
-const VisionJsiProcessorModule = isTurboModuleEnabled
-  ? require('./NativeVisionJsiProcessor').default
-  : NativeModules.VisionJsiProcessor;
+const VisionJsiProcessorModule = NativeModules.VisionJsiProcessor;
 
 const VisionJsiProcessor = VisionJsiProcessorModule
   ? VisionJsiProcessorModule
@@ -24,6 +19,6 @@ const VisionJsiProcessor = VisionJsiProcessorModule
       }
     );
 
-export function multiply(a: number, b: number): Promise<number> {
-  return VisionJsiProcessor.multiply(a, b);
+export function install() {
+  VisionJsiProcessor.install();
 }

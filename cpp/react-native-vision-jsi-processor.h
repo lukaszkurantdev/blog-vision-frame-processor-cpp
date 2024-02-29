@@ -1,8 +1,11 @@
 #ifndef VISIONJSIPROCESSOR_H
 #define VISIONJSIPROCESSOR_H
 
+#include <jsi/jsilib.h>
+#include <jsi/jsi.h>
+
 namespace visionjsiprocessor {
-  double multiply(double a, double b);
+  void install(facebook::jsi::Runtime& jsiRuntime);
 }
 
 #endif /* VISIONJSIPROCESSOR_H */

@@ -69,6 +69,7 @@
     "react": "18.2.0",
     "react-native": "0.73.5",
     "react-native-builder-bob": "^0.20.0",
+    "react-native-vision-camera": "3.9.0",
     "release-it": "^15.0.0",
     "turbo": "^1.10.7",
     "typescript": "^5.2.2"
@@ -78,7 +79,9 @@
   },
   "peerDependencies": {
     "react": "*",
-    "react-native": "*"
+    "react-native": "*",
+    "react-native-vision-camera": "*",
+    "react-native-worklets-core": "*"
   },
   "workspaces": [
     "example"
